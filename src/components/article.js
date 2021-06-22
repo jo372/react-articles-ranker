@@ -1,5 +1,9 @@
 import React from "react";
+import ArticleHeader from "./article-header";
+import ArticleImage from "./article-image";
+import ArticleList from "./article-list";
 import ArticleParagraph from "./article-paragraph";
+
 export class Article extends React.Component {
     constructor(props) {
         super(props);
@@ -16,7 +20,7 @@ export class Article extends React.Component {
             isLoading: true
         });
 
-        fetch(`${process.env.PUBLIC_URL}/data/article-3.json`)
+        fetch(`${process.env.PUBLIC_URL}/data/article-2.json`)
         // TODO: catch HTTP 404 errors, not point in continuing with response.json() if the response isn't event reachable.
         .then(response => response.json())
         .then(result => {
@@ -31,8 +35,19 @@ export class Article extends React.Component {
     }
 
     createComponent(type, model, key) {
-        if(type === "paragraph") { // replace this with a static constant instead of using strings, this might change in the future and it's not great practice.
-            return <ArticleParagraph key={key} model={model}/>
+        switch(type) {
+            case "paragraph": // replace this with a static constant instead of using strings, this might change in the future and it's not great practice.
+                return <ArticleParagraph key={key} model={model}/>
+                break;
+            case "heading":
+                return <ArticleHeader model={model}/>
+                break;
+            case "image":
+                return <ArticleImage model={model}/>
+                break;
+            case "list":
+                return <ArticleList model={model} />
+                break;
         }
     }
 
@@ -68,7 +83,6 @@ export class Article extends React.Component {
 
         console.log(components);
         return (<div>
-            <h1> { data.title }</h1>
             { components }
         </div>);
     } 
