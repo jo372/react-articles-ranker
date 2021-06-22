@@ -1,8 +1,9 @@
 import React from "react";
-import ArticleHeader from "./article-header";
+import ArticleHeading from "./article-heading";
 import ArticleImage from "./article-image";
 import ArticleList from "./article-list";
 import ArticleParagraph from "./article-paragraph";
+import { ArticleType } from "./article-type";
 
 export class Article extends React.Component {
     constructor(props) {
@@ -36,16 +37,16 @@ export class Article extends React.Component {
 
     createComponent(type, model, key) {
         switch(type) {
-            case "paragraph": // replace this with a static constant instead of using strings, this might change in the future and it's not great practice.
+            case ArticleType.PARAGRAPH: // replace this with a static constant instead of using strings, this might change in the future and it's not great practice.
                 return <ArticleParagraph key={key} model={model}/>
                 break;
-            case "heading":
-                return <ArticleHeader model={model}/>
+            case ArticleType.HEADING:
+                return <ArticleHeading model={model}/>
                 break;
-            case "image":
+            case ArticleType.IMAGE:
                 return <ArticleImage model={model}/>
                 break;
-            case "list":
+            case ArticleType.LIST:
                 return <ArticleList model={model} />
                 break;
         }
