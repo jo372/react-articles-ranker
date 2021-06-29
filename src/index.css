@@ -1,13 +1,328 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300&display=swap');
+
+:root {
+  --white: #fff;
+  --black: #000;
+  --transition-timer: .4s;
+  --max-screen-width: 1320px;
+  --padding-offset: 1rem;
+  --light-grey: #d5cdcd;
+  --scroll-button-border-hover-color: #3a3939;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--white, #fff);
+  margin-bottom:60px;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  /* background: #f1f1f1; */
+  background:transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CCCCCC;
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #afafaf;
+}
+
+.scrollToTopButton {
+  position:fixed;
+  right: 45%;
+  bottom: 10px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--white, #fff);
+  border-radius: 100%;
+  border:0;
+  border: 1px solid var(--black, #000);
+  color: var(--black, #000);
+  transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  -webkit-transition: 0.2s;
+  z-index: 5000;
+  cursor: pointer;
+}
+
+.scrollToTopButton:hover {
+  background-color: var(--scroll-to-top-hover-color, #4e4e4e);
+  color: var(--white, #fff);
+  border-color: var(--scroll-button-border-hover-color, #3a3939);
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  max-width: var(--max-screen-width, 1320px);
+}
+
+.image-responsive {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+  position:relative;
+}
+
+.loading-container {
+  text-align: center;
+  position:relative;
+  width:100%;
+}
+
+
+.loading-container .loading-icon-container {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%, -50%);
+  width:100%;
+} 
+
+.centered {
+  display:block;
+  margin: 0 auto;
+}
+
+
+svg.loading-icon {
+  -webkit-animation:spin 4s linear infinite;
+  -moz-animation:spin 4s linear infinite;
+  animation:spin 4s linear infinite;
+  font-size: 1.5em;
+}
+
+article p, article h1 {
+  padding-left:1em;
+  padding-right:1em;
+  text-align: left;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+article h1 {
+  text-align: center;
+}
+
+.article-preview-list {
+  display: flex;
+  justify-content: center;
+  max-width: var(--max-screen-width, 1320px);
+  margin: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.1rem;
+}
+
+.article-preview {
+  width: calc(100% - var(--padding-offset, 1rem));
+  cursor: pointer;
+}
+
+
+.article-preview .preview-title, .article-preview .preview-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width:100%;
+}
+
+.article-preview .preview-text, .article-preview .preview-title {
+  width:100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fade-in {
+  animation: fadeIn ease var(--transition-timer, .4s) forwards;
+  -webkit-animation: fadeIn ease var(--transition-timer, .4s) forwards;
+  -moz-animation: fadeIn ease var(--transition-timer, .4s) forwards;
+  -o-animation: fadeIn ease var(--transition-timer, .4s) forwards;
+  -ms-animation: fadeIn ease var(--transition-timer, .4s) forwards;
+}
+
+.fade-out {
+  animation: fadeOut ease var(--transition-timer, .4s) forwards;
+  -webkit-animation: fadeOut ease var(--transition-timer, .4s) forwards;
+  -moz-animation: fadeOut ease var(--transition-timer, .4s) forwards;
+  -o-animation: fadeOut ease var(--transition-timer, .4s) forwards;
+  -ms-animation: fadeOut ease var(--transition-timer, .4s) forwards;
+}
+
+/**
+  Animation Keyframes
+*/
+
+@-moz-keyframes spin { 
+  100% { 
+    -moz-transform: rotate(360deg); 
+  } 
+}
+
+@-webkit-keyframes spin { 
+  100% { 
+    -webkit-transform: rotate(360deg); 
+  } 
+}
+
+@keyframes spin { 
+  100% { 
+    -webkit-transform: rotate(360deg); 
+    transform:rotate(360deg); 
+  } 
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-moz-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-o-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-ms-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+
+/**
+
+    Media Queries 
+
+*/
+
+/* Mobile first queries */
+
+/* Larger than mobile */
+@media (min-width: 400px) {
+  .article-preview {
+      width: calc(100%/2 - 1rem);
+  }
+}
+
+/* Larger than phablet */
+@media (min-width: 550px) {
+  .article-preview {
+    width: calc(100%/3 - 1rem);
+  }
+}
+
+/* Larger than tablet */
+@media (min-width: 750px) {
+  .container {
+    width: 90%;
+  }
+  .image-responsive {
+    width: auto;
+  }
+
+  .preview-image .image-responsive {
+    width: 100%;
+  }
+
+  .article-preview-list {
+    gap: 1rem;   
+  }
+
+  .scrollToTopButton {
+      right: 10px;
+  }
+}
+
+/* Larger than desktop */
+@media (min-width: 1000px) {}
+
+/* Larger than Desktop HD */
+@media (min-width: 1200px) {}
