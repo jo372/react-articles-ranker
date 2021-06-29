@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Article from './components/article/Article';
+import App from "./components/app/App";
 
 ReactDOM.render(
   <React.StrictMode>
-   <Article id={2}></Article>
+   <App articleIds={[1, 2, 3, 4, 5]}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
