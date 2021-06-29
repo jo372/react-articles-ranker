@@ -1,7 +1,7 @@
 import React from "react";
 
 // this class was creating because paragraph and heading are identical in design therefore we'll have one class deal with text items.
-interface TextItemProps {
+export interface TextItemProps {
     type: TextItemType // the current implemented types for this class, obviously this can be expanded at a later date.
     text: string
 }
@@ -18,20 +18,20 @@ export class TextItem extends React.Component<TextItemProps> {
         type: TextItemType.PARAGRAPH,
         text: ""
     }
-    constructor(props: TextItemProps) {
-        super(props);
-    }
     // creating and returning the item back to whatever called it.
     render() {
         const { type, text } = this.props;
+
+        let el; 
         switch(type) {
             case TextItemType.PARAGRAPH:
-                return <p>{ text }</p>;
+                el = <p>{ text }</p>;
                 break;
             case TextItemType.HEADING:
-                return <h1>{ text }</h1>;
+                el = <h1>{ text }</h1>;
                 break;
         } 
+        return el;
     }
 }
 
