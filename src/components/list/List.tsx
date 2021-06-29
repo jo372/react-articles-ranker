@@ -26,14 +26,20 @@ class List extends React.Component<ListProps> {
         // looping through and generating a unique key for the list items.
         const listElements = items.map((itemText, index) => <li key={`${itemText}_${new Date().getTime()}_${index}`}>{ itemText }</li>);
         // depending on the ListType depends on what the parent container will be.
+        
+
+        // temporary fix to the warning about unreachable code
+        let obj; 
         switch(type) {
             case ListType.ORDERED:
-                return <ol>{listElements}</ol>
+                obj = <ol>{listElements}</ol>
                 break;
             case ListType.UNORDERED:
-                return <ul>{listElements}</ul>
+                obj = <ul>{listElements}</ul>
                 break;
         }
+
+        return obj;
     }
 }
 
