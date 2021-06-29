@@ -1,7 +1,5 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
 import List from './List';
-import { create, ReactTestInstance, ReactTestRendererJSON } from 'react-test-renderer';
+import { create } from 'react-test-renderer';
 
 // creating a test for our list item, testing default constructor and if the properties are pass are they set.
 describe('no properties passed, default constructor', () => {
