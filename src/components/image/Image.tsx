@@ -1,66 +1,102 @@
-import React from "react";
+import axios, { CancelTokenSource } from "axios";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { AppConfig } from "../../app/AppConfig";
 
 // creating an interface which holds the image properties, all url, altText, height and width are required by default.
-interface ImageProps {
-    url: string,
-    altText: string,
-    height: string,
-    width: string
+export interface ImageProps {
+    url?: string,
+    altText?: string,
+    width?: string,
+    height?: string
 }
 
-// creating an image interface which holds state data, is loading and url (considering the url is meant to return a random image but because how react renders all images were the same before with the normal src{this.props.url})
-interface ImageState {
-    isLoading: boolean,
-    url: string
+// creating an element for the loading warning
+const LoadingWarning : React.FC<{width: string, height: string}> = ({
+    width = "0",
+    height = "0"
+}) => {
+    return <div className={"loading-container centered"} style={{
+        background: '#ccc',
+        maxWidth: `${width}px`,
+        width: "100%",
+        height: `${height}px`
+    }}>
+        <div className={"loading-icon-container"}>
+            <AiOutlineLoading3Quarters className={"loading-icon"}/>
+        </div>
+    </div>
 }
 
-// the image class for our react component
-export class Image extends React.Component<ImageProps, ImageState> {
-    // setting default properties for our react object, blank url, blank alt text, no height or width.
-    static defaultProps = {
-        url: "",
-        altText: "",
-        height: "0",
-        width: "0"
+// declaring this variable so I can change it later if needed, instead of writing AppConfig.fallbackImageURL everywhere.
+const fallbackImageURL = AppConfig.fallbackImageURL;
+// a variable which will hold the regex filter used later to test if the responseURL is an image or not.
+const regexFilter : RegExp = new RegExp('image\/(png|jpeg|gif|bmp|vnd.microsoft.icon|tiff|svg\+xml)', 'gi');
+
+// creating a reaction functional component
+export const Image : React.FC<ImageProps> = ({
+    url = "",
+    altText = "",
+    width = "0",
+    height = "0"
+}) => {
+    // creating status that will allow us to know if the image is loading, get the image url (this is if the image is not a jpg, png etc).
+    const [isLoading, setLoading] = useState<boolean>(false);
+    const [imageURL, setImageURL] = useState<string>("");
+    const [error, setError] = useState<Error | string>("");
+
+    // creating a variable which will hold our axios cancel token, just incase it ever needs to be stubbed.
+    let axiosCancelSource: CancelTokenSource;
+    // this will hold track of the component mount status
+    let componentMounted  = true;
+
+    // creating a asynchronus function which will update our cancel source token and returns an Promise<AxiosResponse<any>>
+    const getData = async() => {
+        axiosCancelSource = axios.CancelToken.source();
+        return await axios.get(url, { cancelToken: axiosCancelSource.token});
     }
 
-    constructor(props: ImageProps) {
-        super(props);
-        // setting the default state, I wanted to have the url outside of the state considering it's nothing to do with the state of the object, but I haven't figure that out yet.
-        this.state = {
-            isLoading: false,
-            url : ""
-        }
-    }
+    useEffect(() => {
+        // setting the loading status to true
+        setLoading(true);
+        // getting the data asynchronously
+        getData()
+        .then((response) => {
+            // if the component is mounted, get the content type of the url, check the filter and return either the response url or the fall back image (Error 404)
+            if(componentMounted) {  
+                const contentType = response.headers['content-type'];
+                const responseURL = response.request.responseURL;
 
-    // if the component did mount, we're loading the image! woo. 
-    componentDidMount() {
-        this.setState({
-            isLoading: true
-        });
 
-        // attempting to fetch the ur, checking if the response is okay other we have an error. oh no :(. We'll provide a backup image like error 404 image not found.
-        fetch(this.props.url)
-        // TODO: catch HTTP 404 errors
-        .then(response => {
-            if(response.ok) {
-                this.setState({
-                    url: response.url,
-                    isLoading: false
-                });
-            } else {
-                // provide a backup image
+                // TODO: fix the regex as it's throwing false positives, currently just give back the responseURL. Otherwise we'd give a fallback image if it's of an invalid type.
+                // const responseURL = regexFilter.test(contentType) ? response.request.responseURL : fallbackImageURL;
+                
+                // // setting the image to the image source 
+                setImageURL(responseURL);
+                // // the image isn't loading anymore, update the state.
+                setLoading(false);
             }
         })
-    }
+        .catch((err: Error) => {
+            // if the component is mounted, stop the connection to the url, update the image url, set the error state and stop loading.
+            if(componentMounted) {
+                setError(err);
+                axiosCancelSource.cancel(`Cancelling axios request an error occured: ${err}`);
+                setImageURL(fallbackImageURL);
+                setLoading(false);
+            }
+        });
 
-    // returning the image back to the user!
-    render() {
-        const { width, height, altText } = this.props;
-        const { url } = this.state;
-        // if the image is loading we need to create a div width, height and add a loading image 
-        return <img width={width} height={height} src={url} alt={altText} className={"image-responsive"}/>;
-    }
+        return(() => {
+            componentMounted = false;
+        });
+    }, []);
+
+    // creating the loaded element which will be display and the warning element. If the element is loading, we'll return the loading warning else the loaded image!
+    const loadedElement = <img style={{maxWidth : `${width}px`, width: "100%"}} height={height} src={imageURL} alt={altText} className={"image-responsive centered"} loading={"lazy"}/>;
+    const loadingWarningElement = <LoadingWarning width={width} height={height}/>    
+    return isLoading ? loadingWarningElement : loadedElement;
 }
 
 export default Image;
